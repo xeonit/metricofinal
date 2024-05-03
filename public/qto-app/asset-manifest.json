@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/qto-app/static/css/main.d97576f4.css",
+    "main.js": "/qto-app/static/js/main.3a2e19c7.js",
+    "static/js/787.2d0d2a39.chunk.js": "/qto-app/static/js/787.2d0d2a39.chunk.js",
+    "index.html": "/qto-app/index.html",
+    "main.d97576f4.css.map": "/qto-app/static/css/main.d97576f4.css.map",
+    "main.3a2e19c7.js.map": "/qto-app/static/js/main.3a2e19c7.js.map",
+    "787.2d0d2a39.chunk.js.map": "/qto-app/static/js/787.2d0d2a39.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d97576f4.css",
+    "static/js/main.3a2e19c7.js"
+  ]
+}
