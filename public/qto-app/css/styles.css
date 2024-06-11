@@ -717,7 +717,8 @@ hr {
 }
 
 .tool__box-body {
-  overflow: hidden;
+  overflow:visible;
+  overflow-x: scroll;
   transition: 0.2s;
 }
 

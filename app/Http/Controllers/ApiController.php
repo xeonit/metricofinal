@@ -21,6 +21,8 @@ use App\Models\LineTemplate;
 use Illuminate\Http\Request;
 use App\Models\MaterialClass;
 use App\Models\MaterialDivision;
+use App\Models\Wall;
+use App\Http\Controllers\WallController;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -1360,6 +1362,13 @@ class ApiController extends Controller
             ->where('trade_name', $tradeName)
             ->first();
             // dd($checkTemplate);
+
+            // echo($data['formData']['additionalDatas']);
+           // $data->additionalDatas = json_decode($data['formData']['additionalDatas']);
+           $data['formData']['user_id']=$userId;
+           
+           Wall::create($data['formData']);
+
         if(!$checkTemplate) {
             // dd('in if condition');
             $lineTemplate = new LineTemplate();
@@ -1368,6 +1377,9 @@ class ApiController extends Controller
             $lineTemplate->trade_name = $tradeName;
             $lineTemplate->local_db = $formData;
             $lineTemplate->save();
+             
+          
+
            return json_encode([
                 'status' => 200,
             ]);
@@ -1376,6 +1388,58 @@ class ApiController extends Controller
                  'status' => 400,
              ]);
         }            
+       
+    }
+    
+    public function CalculateData(Request $request) {
+        $data =  $request->all();
+        $projectId = $data['projectId'];
+        $templateName = $data['template_name'];
+       // $tradeName = json_decode($data['trade_name'])->name;
+        // $formData =  $request->json()->all();
+        $formData = json_encode($data['formData']);
+        // dd($formData);
+        $user = auth()->user();
+        $userId = $user->id;
+        $existing_wall = Wall::where('user_id', $userId)
+            ->where('name', $templateName)            
+            ->first();
+            // dd($checkTemplate);
+
+            // echo($data['formData']['additionalDatas']);
+           // $data->additionalDatas = json_decode($data['formData']['additionalDatas']);
+           $data['formData']['user_id']=$userId;
+           $data['formData']['project_id']=$projectId;
+           if(!$existing_wall) {
+           
+          $resultado=  Wall::create($data['formData']);
+
+           }
+           else{
+            $resultado=  $existing_wall->update($data['formData']);
+           }
+           $existing_wall = Wall::where('user_id', $userId)
+           ->where('name', $templateName)            
+           ->first();
+   
+        $wc=   new WallController;
+        $status =200;
+        try {
+            //code...
+            $resultado=$wc->recalculate($existing_wall->id);
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            $status=400;
+            $resultado=$th->getMessage();
+        }
+       
+
+           return json_encode([
+                'status' => $status,
+                'resultado' => $resultado,
+            ]);
+            
        
     }
     public function getLineTemplate() {

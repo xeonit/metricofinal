@@ -161,10 +161,10 @@
                             </a> --}}
                             </td>
                             <td>
-                                <a class="btn-teke-off text-black text-8 d-inline-block" 
+                                {{-- <a class="btn-teke-off text-black text-8 d-inline-block" 
                                 href="{{env('APP_URL').'/labor/'.$project->id.'' }}">
                                 Labors {{$project->labors()->count()}}
-                                </a>
+                                </a> --}}
                                 <a class="btn-teke-off text-black text-8 d-inline-block" 
                                 href="{{env('APP_URL').'/crew/'.$project->id.'' }}">
                                 Crews {{$project->crews()->count()}}

@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\WallController;
 
 /*
 |--------------------------------------------------------------------------
@@ -215,4 +216,5 @@ Route::prefix("/")->middleware('auth', 'location')->group(function () {
 
     Route::get('notification/status', [ApiController::class, 'notification_status'])->name('notification.status');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('recalculate/{project_id}', [WallController::class, "recalculate"]);
 });
