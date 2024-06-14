@@ -33,10 +33,7 @@
             <div class="row mt-3">
                 <div class="col-10">
                     <div class="w-100 d-inline-block">
-                        <h2 class="text-black fs-4 fw-bold">My Materials @if ($project != null)
-                                for {{ $project->name }}
-                            @endif
-                        </h2>
+                        <h2 class="text-black fs-4 fw-bold">My Materials</h2>
                     </div>
                 </div>
                 <div class="col-2">
@@ -47,8 +44,10 @@
                         </ol>
                     </div>
                     <div class="float-end d-inline-block creat-project-btn">
-                        <a href="{{ route('material.add') }}" class="text-14 fw-bold d-inline-block btn-create-project">
-                            <img src="{{ asset('projects') }}/images/plus-icon.svg">
+                         <a href="{{ route('material.add') }}"
+                            class="text-14 fw-bold d-inline-block btn-create-project"
+                        >
+                        <img src="{{ asset('projects') }}/images/plus-icon.svg">
                             Create Material
                         </a>
                     </div>
@@ -56,81 +55,54 @@
             </div>
             <!--end row-->
             <div class="row">
-               
-                <form method="post" action="{{ route('material.division') }}">
-                    @csrf()
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                        <div class="form-group input-project">
-                            <label class="text-14">Division: <span class="text-danger">*</span></label>
-                            <select class="form-control" name="material_division_id" id="material_division_id" >
-                                <option value="">All Divisions</option>
-                                @php
-                                    $material_divisions = get_material_divisions();
-                                @endphp
-                                @foreach ($material_divisions as $material_division)
-                                    @php
-                                    $selected="";
-                                    if($material_division->id == $material_division_id)
-                                        $selected="selected";
-                                    @endphp
-                                    <option value="{{ $material_division->id }}" {{$selected}}>
-                                        {{ $material_division->name }}</option>
-                                @endforeach
-                            </select>
-                            <button class="btn save-btn text-white">Filter</button>
-                        </div>
+            <div class="col-12">
+                <div class="w-100 d-inline-block project-table mt-4">
+                    <table class="table table-striped" id="projectTableId">
+                        <thead class="thead-light">
+                            <tr>
+                                <th class="border-top-0">#</th>
+                                <th class="border-top-0">Material</th>
+                                <th class="border-top-0">Division</th>
+                                <th class="border-top-0">Class</th>
+                                <th class="border-top-0">Material Id</th>
+                                <th class="border-top-0">Created At</th>
+                                <th class="border-top-0">Action</th>
+                            </tr>
+                            <!--end tr-->
+                        </thead>
+                        <tbody>
+                            @php
+                                $i = 1;
+                            @endphp
 
-                    </div>
-                </form>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="w-100 d-inline-block project-table mt-4">
-                        <table class="table table-striped" id="projectTableId">
-                            <thead class="thead-light">
+                            @foreach ($materials as $material)
                                 <tr>
-                                    <th class="border-top-0">#</th>
-                                    <th class="border-top-0">Material</th>
-                                    <th class="border-top-0">Division</th>
-                                    <th class="border-top-0">Class</th>
-                                    <th class="border-top-0">Material Id</th>
-                                    <th class="border-top-0">Created At</th>
-                                    <th class="border-top-0">Action</th>
+                                    <td>{{ $i++ }}</td>
+                                    <td>{{ $material->name }}</td>
+                                    <td>{{ $material->material_division->name }}</td>
+                                    <td>{{ $material->material_class->name }}</td>
+                                    <td>{{ $material->unique_id }}</td>
+                                    <td>{{ $material->created_at->format('d F, Y') }}</td>
+                                    <td class="text-nowrap">
+                                        <a type="button" 
+                                            class="delete-button"
+                                            href="{{ route('material.delete', ['id' => $material->id]) }}"
+                                        >
+                                            <img class="edit-icon" src="{{ asset('projects') }}/images/delete-icon.svg">
+                                        </a>
+                                        <a type="button" class="edit-button"
+                                            href="{{ route('material.edit', ['id' => $material->id]) }}"
+                                        >
+                                       <img class="edit-icon me-2" src="{{ asset('projects') }}/images/edit-icon.svg">
+                                        </a>
+                                    </td>
                                 </tr>
-                                <!--end tr-->
-                            </thead>
-                            <tbody>
-                                @php
-                                    $i = 1;
-                                @endphp
-
-                                @foreach ($materials as $material)
-                                    <tr>
-                                        <td>{{ $i++ }}</td>
-                                        <td>{{ $material->name }}</td>
-                                        <td>{{ $material->material_division->name }}</td>
-                                        <td>{{ $material->material_class->name }}</td>
-                                        <td>{{ $material->unique_id }}</td>
-                                        <td>{{ $material->created_at->format('d F, Y') }}</td>
-                                        <td class="text-nowrap">
-                                            <a type="button" class="delete-button"
-                                                href="{{ route('material.delete', ['id' => $material->id]) }}">
-                                                <img class="edit-icon"
-                                                    src="{{ asset('projects') }}/images/delete-icon.svg">
-                                            </a>
-                                            <a type="button" class="edit-button"
-                                                href="{{ route('material.edit', ['id' => $material->id]) }}">
-                                                <img class="edit-icon me-2"
-                                                    src="{{ asset('projects') }}/images/edit-icon.svg">
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
             <!--end row-->
 
         </div><!-- container -->
@@ -141,8 +113,8 @@
     <script>
         $(document).ready(function() {
             $('#projectTableId').DataTable({
-                "paging": true, // Enable pagination
-                "searching": true, // Enable search
+                "paging": true,  // Enable pagination
+                "searching": true,  // Enable search
                 // You can customize further options here
             });
         });

@@ -60,9 +60,9 @@
               </div>
             </div>
 
-            <div class="credits">
+            {{-- <div class="credits">
               Designed by GOIGI
-            </div>
+            </div> --}}
 
           </div>
         </div>

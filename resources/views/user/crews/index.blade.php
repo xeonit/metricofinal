@@ -33,9 +33,7 @@
              <div class="row mt-3">
                 <div class="col-10">
                     <div class="w-100 d-inline-block">
-                        <h2 class="text-black fs-4 fw-bold">My Crews @if ($project!=null)
-                            for {{$project->name}}
-                         @endif</h2>
+                        <h2 class="text-black fs-4 fw-bold">My Crews</h2>
                     </div>
                 </div>
                 <div class="col-2">

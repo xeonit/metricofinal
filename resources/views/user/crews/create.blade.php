@@ -12,9 +12,7 @@
                     <div class="page-title-box">
                         <div class="row">
                             <div class="col align-self-center">
-                                <h4 class="page-title pb-md-0">Crews  @if ($project!=null)
-                                    for {{$project->name}}
-                                 @endif</h4>
+                                <h4 class="page-title pb-md-0">Crews</h4>
 
                             </div>
                             <!--end col-->
@@ -42,25 +40,6 @@
                             <div class="pt-3 new-project">
                                 <div class="text-center">
                                     <h3 class="text-dark text-center font-24 fw-bold line-height-lg">Create crew</h3>
-                                    <hr>
-                                <h6>Quick Start Crew </h6>
-                                <hr>
-                                <button class="btn back-btn text-black btn-sm import_button"> <i class="fa fa-file-import"></i>
-                                    Import Items</button>
-                                <ul class="import-list">
-                                    @php
-                                        $master_labors = get_master_crews();
-                                    @endphp
-                                    @foreach ($master_labors as $master_labor)
-                                        <li class="import-item">
-                                            <input type="checkbox" class="check-box">
-                                            {{ $master_labor->name }} <a
-                                                href="{{ route('crew.import', ['id' => $master_labor->id]) }}">
-                                                <i class="fa fa-file-import"></i> Use
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
                                 </div>
                                 <form method="post" action="{{ route('crew.create') }}">
                                     @csrf()
@@ -158,7 +137,7 @@
 @section('script')
     <script>
         $(document).ready(function(x) {
-            //window.fs_test = $('.test').fSelect();
+            window.fs_test = $('.test').fSelect();
         })
     </script>
     <script>

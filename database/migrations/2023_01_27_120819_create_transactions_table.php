@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->text('payment_intent');
             $table->integer('plan_id');
-            $table->string('price');
+            $table->price('price');
             $table->text('status');
             $table->timestamps();
         });

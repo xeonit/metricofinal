@@ -79,7 +79,7 @@
 .modal {
   display: block;
   width: 100%;
-  max-width: 800px;
+  max-width: 400px;
   min-height: 300px;
 
   position: fixed;
@@ -717,8 +717,7 @@ hr {
 }
 
 .tool__box-body {
-  overflow:visible;
-  overflow-x: scroll;
+  overflow: hidden;
   transition: 0.2s;
 }
 

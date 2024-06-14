@@ -3,8 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
-use App\Http\Controllers\Wall;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,8 +40,8 @@ Route::middleware('auth.token')->group(function() {
 
     Route::get('materials/divisions', [ApiController::class, 'material_divisions']);
     Route::get('materials/divisions/{id}', [ApiController::class, 'material_from_division']);
-    Route::get('materials/{id}', [ApiController::class, 'materials']);
-    Route::get('material/{id}', [ApiController::class, 'material']);
+    Route::get('materials', [ApiController::class, 'materials']);
+    Route::get('materials/{id}', [ApiController::class, 'material']);
 
     Route::post('plan/uploads', [ApiController::class, 'plan_upload']);
     Route::get('plans/{id}', [ApiController::class, 'project_plans']);
@@ -66,9 +64,7 @@ Route::middleware('auth.token')->group(function() {
     Route::post('current_location', [ApiController::class, "current_location"]);
     Route::get('get_local_db', [ApiController::class, "get_local_db"]);
     Route::post('save-line-template', [ApiController::class, "saveLineTemplate"]);
-    Route::post('CalculateData', [ApiController::class, "CalculateData"]);
     Route::get('get-line-template', [ApiController::class, "getLineTemplate"]);
     Route::get('logout', [ApiController::class, "logout"]);
-    
 
 });

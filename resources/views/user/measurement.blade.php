@@ -12,11 +12,14 @@
     <link rel="apple-touch-icon" href="{{ asset('qto-app') }}/logo192.png" />
     <link rel="manifest" href="{{ asset('qto-app') }}/manifest.json" />
     <title>{{ env('APP_NAME') }}</title>
-    <script defer="defer" src="{{ asset('qto-app') }}/static/js/main.86a68d7b.js"></script>
-    <link href="{{ asset('qto-app') }}/static/css/main.dbfb36e1.css" rel="stylesheet">
+    <script defer="defer" src="{{ asset('qto-app') }}/static/js/main.4fff5f82.js"></script>
+    <link href="{{ asset('qto-app') }}/static/css/main.9df4b2d5.css" rel="stylesheet">
 </head>
 
 <body>
+    <div id="loader" class="preloader-area">
+        <div class="lds-hourglass"></div>
+    </div>
     <div id="root"></div>
 </body>
 

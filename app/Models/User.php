@@ -28,7 +28,8 @@ class User extends Authenticatable
         'plan_id',
         'subscription_end',
         'local_db',
-        'agree'
+        'current_location',
+        'current_location_file',
     ];
 
     /**

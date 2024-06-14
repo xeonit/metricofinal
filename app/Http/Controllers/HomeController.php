@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Crew;
-use App\Models\Labor;
+use App\Models\User;
 
+use App\Models\Labor;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Opening;
@@ -13,6 +14,7 @@ use App\Models\Setting;
 use App\Models\Material;
 use App\Models\Equipment;
 use Illuminate\Http\Request;
+use App\Models\InviteProject;
 use App\Models\MaterialClass;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -21,18 +23,33 @@ class HomeController extends Controller
 {
     
     public function measurement(Request $request, $id) {
-        return view('user.measurement', compact('id'));
+        if(auth()->user()){
+            return view('user.measurement', compact('id'));
+        }else{
+            return view('user.auth.login');
+        }
     }
     public function startMeasurement(Request $request, $id) {
         // return view('user.measurement', compact('id'));
-        $appUrl = env('APP_URL');
-        $targetUrl = "{$appUrl}/{$id}/application";
-        // Redirect to the target URL
-        return Redirect::away($targetUrl);
+        
+        if(auth()->user()){
+             $appUrl = env('APP_URL');
+             $targetUrl = "{$appUrl}/{$id}/application";
+             // Redirect to the target URL
+             return Redirect::away($targetUrl);
+            // return view('user.measurement', compact('id'));
+        }else{
+            return view('user.auth.login');
+        }
     }
     public function project() {
-        $projects = Project::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
-        return view('user.projects.index', compact('projects'));
+        $projects = Project::where('user_id', Auth::id())
+                    ->orderBy('id', 'desc')
+                    ->get();
+        $userEmail = User::where('id', Auth::id())->first()->email;
+        $inviteIds = InviteProject::where('invite_to', $userEmail)->where('status', '1')->pluck('project_id')->toArray();
+        $inviteProjects = Project::whereIn('id',  $inviteIds)->get();
+        return view('user.projects.index', compact('projects', 'inviteProjects'));
     }
     public function create_project_page() {
         return view("user.projects.create");
@@ -155,44 +172,20 @@ class HomeController extends Controller
 
         return view('user.projects.edit', compact('project'));
     }
-
-
-
-    /////LABORS/////
-    public function labor($idProject=null) {
-        
-         if($idProject=="create")
-         {
-            return $this->create_labor_page();
-         }
-         else
-         {
-            session(['idProject' => $idProject]);
-            //echo "Project ".$idProject;
-         }
-        $project = Project::find($idProject);
+    public function labor() {
         $user_id = Auth::id();
-        $labors = Labor::where('user_id', $user_id)->where('project_id', null)->orderBy('id', 'desc')->get();
-        if( $idProject!=null)
-        {
-            $labors = Labor::where('project_id', $idProject)->orderBy('id', 'desc')->get();
-        }
+        $labors = Labor::where('user_id', $user_id)->orderBy('id', 'desc')->get();
 
-        return view('user.labors.index', compact('labors'), compact('project'));
+        return view('user.labors.index', compact('labors'));
     }
 
     public function create_labor_page() {
-        $idProject = session('idProject');
-        $project = Project::find($idProject);
-        return view("user.labors.create"   , compact('project') );
+        return view("user.labors.create");
     }
 
     public function import_labor($id) {
-        $idProject = session('idProject');
-       
-       
         $labor = Labor::find($id);
-         
+
         $isSuccess = Labor::create([
             "user_id" => Auth::id(),
             "labor_class_id" => $labor->labor_class_id,
@@ -201,7 +194,6 @@ class HomeController extends Controller
             "cost_per_hour" => $labor->cost_per_hour,
             "burdens" => $labor->burdens,
             "total_cost" => $labor->total_cost,
-            "project_id" => $idProject,
         ]);
 
         if($isSuccess) {
@@ -212,9 +204,6 @@ class HomeController extends Controller
 
     }
     public function create_labor(Request $request) {
-        
-        $idProject = session('idProject');
-        
         $isSuccess = Labor::create([
             "user_id" => Auth::id(),
             "labor_class_id" => $request->post("labor_class_id"),
@@ -223,7 +212,6 @@ class HomeController extends Controller
             "cost_per_hour" => $request->post("cost_per_hour"),
             "burdens" => json_encode($request->burdens),
             "total_cost" => $request->post("total_cost"),
-            "project_id" => $idProject,
         ]);
 
         if($isSuccess) {
@@ -263,46 +251,23 @@ class HomeController extends Controller
         return back()->with("message", "⚠ Error While Updating Record!");
     }
 
-    
-    
-    
-    /////crews/////
-    public function crew($idProject=null) {
-        if($idProject=="create")
-         {
-            return $this->create_crew_page();
-         }
-         else
-         {
-            session(['idProject' => $idProject]);
-            //echo "Project ".$idProject;
-         }
-        $project = Project::find($idProject);
-        
-        $crews = Crew::where('user_id', Auth::id())->where('project_id', null)->orderBy('id', 'desc')->get();
-        if( $idProject!=null)
-        {
-            $crews = Crew::where('project_id', $idProject)->orderBy('id', 'desc')->get();
-        }
 
-        return view('user.crews.index', compact('crews'), compact('project'));
+    public function crew() {
+        $crews = Crew::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+
+        return view('user.crews.index', compact('crews'));
     }
 
     public function create_crew_page() {
-        $idProject = session('idProject');
-        $project = Project::find($idProject);
-        return view("user.crews.create"   , compact('project') );
-        
+        return view("user.crews.create");
     }
 
     public function create_crew(Request $request) {
-        $idProject = session('idProject');
         $isSuccess = Crew::create([
             'user_id' => Auth::id(),
             'name' => $request->post('name'),
             'description' => $request->post('description'),
-            'labor_info' => json_encode($request->post('labor_info')),
-            "project_id" => $idProject,
+            'labor_info' => json_encode($request->post('labor_info'))
         ]);
 
         if($isSuccess) {
@@ -342,64 +307,21 @@ class HomeController extends Controller
 
         return view('user.crews.edit', compact('crew'));
     }
-    public function import_crew($id) {
-        $idProject = session('idProject');
-       
-       
-        $crew = Crew::find($id);
-         
-        $isSuccess = Crew::create([
-            "user_id" => Auth::id(),
-            "name" => $crew->name,
-            "description" => $crew->description,
-            "labor_info" => $crew->labor_info,             
-            "project_id" => $idProject,
-        ]);
 
-        if($isSuccess) {
-            return back()->with("message", "&check; Labor Imported!");
-        }
+    public function equipment() {
+        $equipments = Equipment::where('user_id', Auth::id())->orderBy("id", "desc")->get();
 
-        return back()->with("message", "⚠ Error While Importing Record!");
-
-    }
- 
- 
- 
- 
- 
-    /////equipments/////
-    public function equipment($idProject=null) {
-        if($idProject=="create")
-         {
-            return $this->create_equipment_page();
-         }
-         else
-         {
-            session(['idProject' => $idProject]);
-            //echo "Project ".$idProject;
-         }
-        $project = Project::find($idProject);
-        $equipments = Equipment::where('user_id', Auth::id())->where('project_id', null)->orderBy("id", "desc")->get();
-        if( $idProject!=null)
-        {
-            $equipments = Equipment::where('project_id', $idProject)->orderBy('id', 'desc')->get();
-        }
-
-        return view('user.equipments.index', compact('equipments'), compact('project'));
+        return view('user.equipments.index', compact('equipments'));
     }
     public function import_equipment($id) {
-
-        $idProject = session('idProject');
         $equipment = Equipment::find($id);
-        
+
         $isSuccess = Equipment::create([
             'user_id' => Auth::id(),
             'name' => $equipment->name,
             'description' => $equipment->description,
             'unique_id' => $equipment->unique_id,
-            'cost_per_day' => $equipment->cost_per_day,
-            "project_id" => $idProject,
+            'cost_per_day' => $equipment->cost_per_day
         ]);
 
         if($isSuccess) {
@@ -410,21 +332,15 @@ class HomeController extends Controller
 
     }
     public function create_equipment_page() {
-        $idProject = session('idProject');
-        $project = Project::find($idProject);
-        return view("user.equipments.create"   , compact('project') );
-        //return view("user.equipments.create");
+        return view("user.equipments.create");
     }
     public function create_equipment(Request $request) {
-
-        $idProject = session('idProject');
         $isSuccess = Equipment::create([
             "user_id" => Auth::id(),
             "name" => $request->post("name"),
             "description" => $request->post('description'),
             "unique_id" => \generate_uid("EQIP"),
-            "cost_per_day" => $request->post("cost_per_day"),
-            "project_id" => $idProject,
+            "cost_per_day" => $request->post("cost_per_day")
         ]);
 
         if($isSuccess) {
@@ -465,9 +381,6 @@ class HomeController extends Controller
         return back()->with("message", "⚠ Error While Updating Record!");
     }
 
-
-
-
     public function contact() {
         $contacts = Contact::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
 
@@ -497,7 +410,9 @@ class HomeController extends Controller
 
         return back()->with("message", "⚠ Error While Creating Record!");
     }
-    
+    public function add_material() {
+        return view('user.materials.add');
+    }
     public function delete_contact($id) {
         $isSuccess = Contact::find($id)->delete();
 
@@ -691,83 +606,16 @@ class HomeController extends Controller
         return $isSuccess;
     }
 
-
-
-     /////MATERIALES/////
     public function get_material_class($id) {
         $material_class = MaterialClass::where('material_division_id', $id)->get();
 
         return \json_decode($material_class);
     }
-
-    public function add_material() {
-        $idProject = session('idProject');
-        $project = Project::find($idProject);
-        return view("user.materials.add"   , compact('project') );
-       // return view('user.materials.add');
-    }
-    public function material($idProject=null,$material_division_id=null) {
-
-       // echo "material_division_id ".$material_division_id;
-        if($idProject=="add")
-         {
-            return $this->add_material();
-         }
-         else
-         {
-            session(['idProject' => $idProject]);
-            //echo "Project ".$idProject;
-         }
-
-
-        $project = Project::find($idProject);
-        $materials = Material::where('user_id', Auth::id())->where('project_id', null)->orderBy('id', 'desc');
-        if( $idProject!=null)
-        {
-            $materials = Material::where('project_id', $idProject)->orderBy('id', 'desc');
-        }
-         if( $material_division_id!=null)
-        {
-            $materials = Material::where('material_division_id', $material_division_id)->orderBy('id', 'desc');
-        }
-        $materials = $materials->get();
-        $data = array(
-            'material_division_id' => "",            
-        );
-
-        return view('user.materials.index', compact('materials'), compact('project'))->with($data);
-    }
-
-
-    public function material_division(Request $request) {
-
-        $idProject = session('idProject');
-         
-        
-        
-        $material_division_id=$request->post('material_division_id');
-
-
-        $project = Project::find($idProject);
-        $materials = Material::where('user_id', Auth::id())->where('project_id', null)->orderBy('id', 'desc');
-        if( $idProject!=null)
-        {
-            $materials = Material::where('project_id', $idProject)->orderBy('id', 'desc');
-        }
-         if( $material_division_id!=null)
-        {
-            $materials = $materials->where('material_division_id', $material_division_id)->orderBy('id', 'desc');
-        }
-        $materials = $materials->get();
-
-        $data = array(
-            'material_division_id' => $material_division_id,            
-        );
-        return view('user.materials.index', compact('materials'), compact('project'))->with($data);
+    public function material() {
+        $materials = Material::where('user_id', Auth::id())->orderBy('id', 'desc')->get();
+        return view('user.materials.index', compact('materials'));
     }
     public function import_material($id) {
-
-        $idProject = session('idProject');
         $material = Material::find($id);
 
         $isSuccess = Material::create([
@@ -789,7 +637,6 @@ class HomeController extends Controller
             'cleaning_cost' => $material->cleaning_cost,
             'cleaning_subed_out' => $material->cleaning_subed_out,
             'associated_products' => $material->associated_products,
-            "project_id" => $idProject,
             
         ]);
 
@@ -801,8 +648,6 @@ class HomeController extends Controller
 
     }
     public function create_material(Request $request) {
-
-        $idProject = session('idProject');
         $isSuccess = Material::create([
             'user_id' => Auth::id(),
             'name' => $request->post('name'),
@@ -822,8 +667,7 @@ class HomeController extends Controller
             'production_subed_out_cost' => $request->post('production_subed_out_cost'),
             'cleaning_cost' => $request->post('cleaning_cost'),
             'cleaning_subed_out' => $request->post('cleaning_subed_out'),
-            'associated_products' => json_encode($request->post('associated_products')),
-            "project_id" => $idProject,
+            'associated_products' => json_encode($request->post('associated_products'))
         ]);
 
         if($isSuccess) {

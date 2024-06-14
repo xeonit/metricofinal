@@ -209,9 +209,15 @@ project-table .dataTables_wrapper .dataTables_paginate .paginate_button.disabled
 	background-color: #00A5B6;
     border: 1px solid #00A5B6;
 }
-#create-project .modal-content .modal-header,#editProjectModal .modal-content .modal-header{
+#create-project .modal-content .modal-header,#editProjectModal .modal-content .modal-header,#inviteProjectModal .modal-content .modal-header{
 	background-color: #fff;
 }
+.accept-btn{
+	padding: 5px 10px;
+}
+
+
+
 
 
 

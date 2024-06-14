@@ -1483,9 +1483,9 @@ body.dark-sidebar.enlarge-menu .left-sidebar:hover .sidebar-user-pro {
         z-index: 1
     }
 
-    body[data-layout=horizontal] .topbar .brand .logo .logo-lg {
+    /* body[data-layout=horizontal] .topbar .brand .logo .logo-lg {
         display: none !important
-    }
+    } */
 
     body[data-layout=horizontal] .topbar .navigation-menu {
         margin-left: 60px
@@ -10456,35 +10456,12 @@ label.pr_loc {
     margin: 0 1px;
     font-size: 12px;
 }
-.text-15{
-    font-size: 15px;
-}
-#inviteModal .modal-dialog {
-    max-width: 900px;
-}
-.invite-btn a{
-    background-color:green;
-    border-color: green;
-}
-.invite-modal table td{
-    padding-left: 10px;
-}
-#PrevButtonModal .modal-dialog {
-    max-width: 800px;
-}
+
 .inner-tab-opt .nav-tabs li a.nav-link.active {
     background: #000;
     color: #fff;
 }
-.main-inner-tab-opt .nav-tabs li a.nav-link.active {
-    background-color: #557ef8 !important;
-    border-color: #557ef8 !important;
-}
-.main-inner-tab-opt .nav-tabs li a.nav-link {
-    font-weight: bold;
-    font-size: 18px !important;
-    padding: 10px 60px !important;
-}
+
 .inner-tab-opt .tab-content {
     padding: 20px;
 }

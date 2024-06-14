@@ -166,7 +166,7 @@
     <script src="{{ asset('fronts') }}/assets/js/fSelect.js"></script>
     <script>
         $(document).ready(function(x) {
-          //  window.fs_test = $('.test').fSelect();
+            window.fs_test = $('.test').fSelect();
         })
     </script>
     <script>

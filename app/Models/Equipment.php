@@ -14,8 +14,7 @@ class Equipment extends Model
         'user_id',
         "description",
         "unique_id",
-        "cost_per_day",
-        'project_id',
+        "cost_per_day"
     ];
     public function crews()
     {

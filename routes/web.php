@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\InviteController;
 use App\Http\Controllers\LandingController;
-use App\Http\Controllers\WallController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,7 +138,7 @@ Route::get('/page/{slug}', [LandingController::class, 'static_page'])->name('lan
 Route::prefix("/")->middleware('auth', 'location')->group(function () {
     Route::get('/add-number', [AuthController::class, 'add_number'])->name('add_number');
     Route::post('/add-number', [AuthController::class, 'do_add_number'])->name('do_add_number');
-    Route::get('/labor/{idProject?}', [HomeController::class, 'labor'])->name('labor');
+    Route::get('/labor', [HomeController::class, 'labor'])->name('labor');
     Route::get('/labor/create', [HomeController::class, 'create_labor_page'])->name('labor.create');
     Route::post('/labor/create', [HomeController::class, 'create_labor'])->name('labor.create');
     Route::get('/labor/import/{id}', [HomeController::class, 'import_labor'])->name('labor.import');
@@ -146,23 +146,14 @@ Route::prefix("/")->middleware('auth', 'location')->group(function () {
     Route::get('/labor/edit/{id}', [HomeController::class, 'edit_labor'])->name('labor.edit');
     Route::post('/labor/update/{id}', [HomeController::class, 'update_labor'])->name('labor.update');
 
-    Route::get('/labor_project/{idProject?}', [HomeController::class, 'labor'])->name('labor_project');
-    Route::get('/labor_project/create', [HomeController::class, 'create_labor_page'])->name('labor_project.create');
-    Route::post('/labor_project/create', [HomeController::class, 'create_labor'])->name('labor_project.create');
-    Route::get('/labor_project/import/{id}', [HomeController::class, 'import_labor'])->name('labor_project.import');
-    Route::get('/labor_project/delete/{id}', [HomeController::class, 'delete_labor'])->name('labor_project.delete');
-    Route::get('/labor_project/edit/{id}', [HomeController::class, 'edit_labor'])->name('labor_project.edit');
-    Route::post('/labor_project/update/{id}', [HomeController::class, 'update_labor'])->name('labor_project.update');
-
-    Route::get('/crew/{idProject?}', [HomeController::class, 'crew'])->name('crew');
+    Route::get('/crew', [HomeController::class, 'crew'])->name('crew');
     Route::get('/crew/create', [HomeController::class, 'create_crew_page'])->name('crew.create');
     Route::post('/crew/create', [HomeController::class, 'create_crew'])->name('crew.create');
     Route::get('/crew/delete/{id}', [HomeController::class, 'delete_crew'])->name('crew.delete');
     Route::get('/crew/edit/{id}', [HomeController::class, 'edit_crew'])->name('crew.edit');
     Route::post('/crew/update/{id}', [HomeController::class, 'update_crew'])->name('crew.update');
-    Route::get('/crew/import/{id}', [HomeController::class, 'import_crew'])->name('crew.import');
 
-    Route::get('/equipment/{idProject?}', [HomeController::class, 'equipment'])->name('equipment');
+    Route::get('/equipment', [HomeController::class, 'equipment'])->name('equipment');
     Route::get('/equipment/create', [HomeController::class, 'create_equipment_page'])->name('equipment.create');
     Route::post('/equipment/create', [HomeController::class, 'create_equipment'])->name('equipment.create');
     Route::get('/equipment/import/{id}', [HomeController::class, 'import_equipment'])->name('equipment.import');
@@ -190,8 +181,7 @@ Route::prefix("/")->middleware('auth', 'location')->group(function () {
     Route::get('/opening/edit/{id}', [HomeController::class, 'edit_opening'])->name('opening.edit');
     Route::post('/opening/update/{id}', [HomeController::class, 'update_opening'])->name('opening.update');
 
-    Route::get('/material/{idProject?}', [HomeController::class, 'material'])->name('material');
-    Route::post('/material/division', [HomeController::class, 'material_division'])->name('material.division');
+    Route::get('/material', [HomeController::class, 'material'])->name('material');
     Route::post('/material', [HomeController::class, 'create_material'])->name('material.create');
     Route::get('/material/add', [HomeController::class, 'add_material'])->name('material.add');
     Route::get('/material/import/{id}', [HomeController::class, 'import_material'])->name('material.import');
@@ -216,5 +206,11 @@ Route::prefix("/")->middleware('auth', 'location')->group(function () {
 
     Route::get('notification/status', [ApiController::class, 'notification_status'])->name('notification.status');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('recalculate/{project_id}', [WallController::class, "recalculate"]);
+   //Invite User routes
+    Route::post('/invite', [InviteController::class, 'invite'])->name('invite');
+    Route::get('/invite-user', [InviteController::class, 'inviteUser'])->name('invite-user');
+    Route::post("/invite-login", [InviteController::class, "inviteLogin"])->name('invite-login');
+    Route::post("/invite-register", [InviteController::class, "inviteRegister"])->name('invite-register');
+    Route::get('/invite-project-user/{id}', [InviteController::class, 'inviteProjectUser'])->name('invite-project-user');
+    Route::get('/delete-invite-user/{id}', [InviteController::class, 'deleteInviteUser'])->name('delete-invite-user');
 });

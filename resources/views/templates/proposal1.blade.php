@@ -50,9 +50,9 @@
 
                     Following list generated from all materials used in the project and display it below:
                 <ul style="padding: 12px">
-                    @foreach ($reports as $row)
+                    {{-- @foreach ($reports as $row)
                         <li>{{ $row['name'] }} – {{ $row['class'] }}</li>
-                    @endforeach
+                    @endforeach --}}
                 </ul>
                 General contractor shall Provide at no cost to {{ auth()->user()->company }} Electric hook up and
                 power
@@ -73,7 +73,7 @@
                 for the
                 above project. All work to be completed in a substantial and workman like manner, all for the sum
                 of.
-                <p>${{ $finalReport['project_total'] }}</p>
+                {{-- <p>${{ $finalReport['project_total'] }}</p> --}}
 
                 <h4>{{ auth()->user()->name }}</h4>
                 <p>{{ auth()->user()->company }}</p>

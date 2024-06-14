@@ -13,8 +13,7 @@ class Crew extends Model
         'name',
         'user_id',
         'description',
-        'labor_info',
-        'project_id',
+        'labor_info'
     ];
 
     public function user() {

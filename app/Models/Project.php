@@ -33,71 +33,26 @@ class Project extends Model
         'labor_profit_info',
         'equipment_profit_info',
         'subcontractor_profit_info',
-        'other_profit_info',
-        'job_walk_date',
-        'job_walk_time',
-        'rfi_due_date',
-        'rfi_due_time',
-        'start_date',
-        'end_date',
-        'size',
-        'measurement_unit',
-        'architect',
-        'description',
-        'competitive_bidding',
-        'project_type',
-        'budgeting_type',
-        'client',
-        'bid_to_client_date',
-        'bid_to_client_time',
-        'account_manager',
-        'project_value',
-        'fee_percentage',
-        'market_sector',
-        'certificate',
-        'certifying_agency',
-        'notes',
-        'owning_office',
-        'scope',
-        'folder',
-        'files'
+        'other_profit_info'
     ];
-
-    public function openings()
-    {
+    function invitedUser(){
+        return $this->hasMany(InviteProject::class, 'project_id');
+    }
+    public function openings() {
         return $this->hasMany(Opening::class);
     }
-    public function document()
-    {
+    public function document() {
         return $this->hasOne(Document::class);
     }
-    public function projectCustomer()
-    {
+    public function projectCustomer() {
         return $this->hasOne(Contact::class, "id", "customer");
     }
-    public static function boot()
-    {
+    public static function boot() {
         parent::boot();
 
-        static::deleting(function ($project) {
+        static::deleting(function($project) {
             $project->openings()->delete();
             $project->document()->delete();
         });
-    }
-    public function labors()
-    {
-        return $this->hasMany(Labor::class);
-    }
-    public function crews()
-    {
-        return $this->hasMany(Crew::class);
-    }
-    public function materials()
-    {
-        return $this->hasMany(Material::class);
-    }
-    public function equipments()
-    {
-        return $this->hasMany(Equipment::class);
     }
 }

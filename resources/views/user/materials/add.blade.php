@@ -12,9 +12,7 @@
                     <div class="page-title-box">
                         <div class="row">
                             <div class="col align-self-center">
-                                <h4 class="page-title pb-md-0">Materials  @if ($project!=null)
-                                    for {{$project->name}}
-                                 @endif</h4>
+                                <h4 class="page-title pb-md-0">Materials</h4>
 
                             </div>
                             <!--end col-->

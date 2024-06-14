@@ -17,8 +17,7 @@ class Labor extends Model
         'unique_id',
         'cost_per_hour',
         'burdens',
-        'total_cost',
-        'project_id',
+        'total_cost'
     ];
 
     public function labor_class() {

@@ -148,14 +148,9 @@ if (!function_exists('get_user_seetings')) {
 if (!function_exists('get_labor_names')) {
     function get_labor_names()
     {
-        $labors = DB::table('labors');
-        $idProject = session('idProject');
-        if($idProject)
-        {
-             
-            $labors =$labors ->where('user_id',  Auth::id())->where('project_id',  $idProject);
-        }
-        return $labors->get();
+        $labors = DB::table('labors')->get();
+
+        return $labors;
     }
 }
 
@@ -163,12 +158,6 @@ if (!function_exists('get_user_labors')) {
     function get_user_labors()
     {
         $labors = DB::table('labors')->where('user_id', Auth::id())->get();
-        $idProject = session('idProject');
-        if($idProject)
-        {
-             
-            $labors = DB::table('labors')->where('user_id',  Auth::id())->where('project_id',  $idProject)->get();
-        }
         return $labors;
     }
 }
@@ -315,13 +304,8 @@ if (!function_exists('get_length_units')) {
 }
 if(!function_exists('get_user_equipment_unique_id')) {
     function get_user_equipment_unique_id() {
-        $userLabors = DB::table('equipment')->select('unique_id')->where('user_id', Auth::id())->where('project_id', null)->get();
-        $idProject = session('idProject');
-        if($idProject!=null)
-        {
-            $userLabors = DB::table('equipment')->select('unique_id')->where('user_id', Auth::id())->where('project_id', $idProject)->get();
-      
-        }
+        $userLabors = DB::table('equipment')->select('unique_id')->where('user_id', Auth::id())->get();
+
         $arr = [];
 
         foreach($userLabors as $labor) {
@@ -335,32 +319,13 @@ if (!function_exists('get_master_equipments')) {
     function get_master_equipments()
     {
         $equipments = DB::table('equipment')->where('user_id', 0)->whereNotIn('unique_id', get_user_equipment_unique_id())->get();
-        $idProject = session('idProject');
-        if($idProject)
-        {
-             
-            $equipments = DB::table('equipment')->where('user_id',  Auth::id())->where('project_id',  null)->whereNotIn('unique_id', get_user_equipment_unique_id())->get();
-        }
+
         return $equipments;
     }
 }
 if(!function_exists('get_user_labor_unique_id')) {
     function get_user_labor_unique_id() {
-        $userLabors = 
-        DB::table('labors')
-        ->select('unique_id')
-        ->where('user_id', Auth::id())
-        ->where('project_id', null)
-        ->get();
-        $idProject = session('idProject');
-        if($idProject!=null)
-        {
-            $userLabors = DB::table('labors')
-            ->select('unique_id')
-            
-            ->where('project_id', $idProject)
-            ->get();
-        }
+        $userLabors = DB::table('labors')->select('unique_id')->where('user_id', Auth::id())->get();
 
         $arr = [];
 
@@ -376,82 +341,15 @@ if (!function_exists('get_master_labors')) {
     {
        
 
-         
+        
         $labors = DB::table('labors')->where('user_id', 0)->whereNotIn('unique_id', get_user_labor_unique_id())->get();
-        $idProject = session('idProject');
-        if($idProject)
-        {
-            
-            $labors = DB::table('labors')->where('user_id',  Auth::id())->where('project_id',  null)->whereNotIn('unique_id', get_user_labor_unique_id())->get();
-        }
 
         return $labors;
     }
 }
-
-
-
-
-if(!function_exists('get_user_crews_unique_id')) {
-    function get_user_crews_unique_id() {
-        $userLabors = 
-        DB::table('crews')
-        ->select('name')
-        ->where('user_id', Auth::id())
-        ->where('project_id', null)
-        ->get();
-        $idProject = session('idProject');
-        if($idProject!=null)
-        {
-            $userLabors = DB::table('crews')
-            ->select('name')
-            
-            ->where('project_id', $idProject)
-            ->get();
-        }
-
-        $arr = [];
-
-        foreach($userLabors as $labor) {
-            $arr[] = $labor->name;
-        }
-
-        return $arr;
-    }
-}
-if (!function_exists('get_master_crews')) {
-    function get_master_crews()
-    {
-       
-
-         
-        $labors = DB::table('crews')->where('user_id', 0)->whereNotIn('name', get_user_crews_unique_id())->get();
-        $idProject = session('idProject');
-        if($idProject)
-        {
-            
-            $labors = DB::table('crews')->where('user_id',  Auth::id())->where('project_id',  null)->whereNotIn('name', get_user_crews_unique_id())->get();
-        }
-
-        return $labors;
-
-    }
-}
-
-
-
-
-
-
 if(!function_exists('get_user_materials_unique_id')) {
     function get_user_materials_unique_id() {
-        $userMaterials = DB::table('materials')->select('unique_id')->where('user_id', Auth::id())->where('project_id', null)->get();
-        $idProject = session('idProject');
-        if($idProject!=null)
-        {
-            $userMaterials = DB::table('materials')->select('unique_id')->where('user_id', Auth::id())->where('project_id', $idProject)->get();
-      
-        }
+        $userMaterials = DB::table('materials')->select('unique_id')->where('user_id', Auth::id())->get();
 
         $arr = [];
 
@@ -466,12 +364,7 @@ if (!function_exists('get_master_materials')) {
     function get_master_materials()
     {
         $materials = DB::table('materials')->where('user_id', 0)->whereNotIn('unique_id', get_user_materials_unique_id())->get();
-        $idProject = session('idProject');
-        if($idProject)
-        {
-            
-            $materials = DB::table('materials')->where('user_id',  Auth::id())->where('project_id',  null)->whereNotIn('unique_id', get_user_materials_unique_id())->get();
-        }
+
         return $materials;
     }
 }

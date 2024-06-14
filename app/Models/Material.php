@@ -28,8 +28,7 @@ class Material extends Model
         'production_subed_out_cost',
         'cleaning_cost',
         'cleaning_subed_out',
-        'associated_products',
-        'project_id',
+        'associated_products'
     ];
 
     public function material_class() {

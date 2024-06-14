@@ -10,9 +10,7 @@
                     <div class="page-title-box">
                         <div class="row">
                             <div class="col align-self-center">
-                                <h4 class="page-title pb-md-0">Create Labor @if ($project!=null)
-                                    for {{$project->name}}
-                                 @endif</h2></h4>
+                                <h4 class="page-title pb-md-0">Create Labor</h4>
 
                             </div>
                             <!--end col-->

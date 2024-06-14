@@ -6,9 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "barryvdh/laravel-dompdf": "^2.0",
         "cloudconvert/cloudconvert-laravel": "^1.1",
-        "fruitcake/laravel-cors": "^3.0",
+        "convertio/convertio-php": "^0.4.0",
+        "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
@@ -16,6 +16,7 @@
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.4",
         "stripe/stripe-php": "^10.4",
+        "tecnickcom/tcpdf": "^6.6",
         "zendframework/zendpdf": "^2.0"
     },
     "require-dev": {
@@ -30,8 +31,7 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "CloudConvert\\": "vendor/cloudconvert/cloudconvert-laravel/src/"
+            "Database\\Seeders\\": "database/seeders/"
         },
         "files": ["app/Helpers/Helper.php"]
     },

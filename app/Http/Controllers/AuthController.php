@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Carbon;
-use App\Models\Transaction;
-use App\Models\Document;
-use Illuminate\Support\Facades\Redirect;
-use App\Models\Plan;
-use Stripe;
 use Hash;
-
+use Stripe;
+use App\Models\Plan;
 use App\Models\User;
+use App\Models\Document;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
     public function login() {
 
         return view("user.auth.login");
+        
     }
 
     public function do_login(Request $request) {
@@ -69,7 +70,6 @@ class AuthController extends Controller
             'username' => 'required',
             'password' => 'required',
             'business_type' => 'required',
-            'agree' => 'required',
         ]);
 
         if(email_exists($request->post('email'))) {
@@ -78,10 +78,22 @@ class AuthController extends Controller
         if(username_exists($request->post('username'))) {
             return back()->with("message", "⚠ Username Already Exists");
         }
+        $plan = Plan::where('type', 0)->first();
         $user['password'] = Hash::make($request->post('password'));
-        $user['plan_id'] =  Plan::where('type', 0)->first()->id;
-        $user['agree'] =  $request->agree == 'on'? '1':'0';
-        // dd($user);
+        $user['plan_id'] =  $plan->id;
+        $subsription_period = $plan->time_unit;
+
+        if($subsription_period == 0) {
+            $sub_end = \now();
+
+            $sub_end->addMonths(1);
+        } else {
+            $sub_end = \now();
+
+            $sub_end->addMonths(12);
+        }
+        $user['subscription_end'] =  $sub_end;
+        $user['agree'] =  $request->agree ?? '0';
         $credentials = User::create($user);
 
         if($credentials) {
